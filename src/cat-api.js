@@ -1,4 +1,10 @@
 'use strict';
+import Notiflix from 'notiflix';
+
+Notiflix.Notify.init({
+  width: '350px',
+  position: 'center-top',
+});
 
 const urlForBreeds = 'https://api.thecatapi.com/v1/breeds';
 const urlForOneBreed = 'https://api.thecatapi.com/v1/images/search?breed_ids=';
@@ -27,6 +33,7 @@ function fetchBreeds() {
       }));
     })
     .catch(err => {
+      Notiflix.Notify.failure('Failure, please try later');
       console.log('Failure', err);
     });
 }
@@ -42,6 +49,7 @@ function fetchCatByBreed(breedId) {
       return res.json();
     })
     .catch(err => {
+      Notiflix.Notify.failure('Failure, please try later');
       console.log('Failure', err);
     });
 }

@@ -2,13 +2,20 @@
 import { fetchBreeds, fetchCatByBreed } from './cat-api';
 import SlimSelect from 'slim-select';
 import '/node_modules/slim-select/dist/slimselect.css';
+import Notiflix from 'notiflix';
 // import axios from 'axios';
 
 // axios.defaults.headers.common['x-api-key'] =
 // 'live_vpvUjSl35zCQrr2xVBQkxMWUrItKUIxcePkJ0efHivlt5bmWOjY1RonXbknluLML';
 
+Notiflix.Notify.init({
+  width: '350px',
+  position: 'center-top',
+});
+
 const selectBreedElem = document.querySelector('.breed-select');
 const catInfoContainer = document.querySelector('.cat-info');
+const loaderElement = document.querySelector('.loader');
 
 fetchBreeds().then(data => {
   selectBreedElem.insertAdjacentHTML(
@@ -29,6 +36,10 @@ fetchBreeds().then(data => {
 selectBreedElem.addEventListener('change', function (event) {
   fetchCatByBreed(event.target.value).then(data => {
     console.log(data);
+    if (data.length == 0) {
+      Notiflix.Notify.failure('data undefined, please try later');
+      return;
+    }
     let dataObj = {
       url: data[0].url,
       name: data[0].breeds[0].name,
@@ -43,10 +54,10 @@ const makeElem = ({ url, name, temperament }) => {
      src="${url}"
      alt=""
      width="450px"
-   /></div>
+   /></div><div class="description-container">
       <div class="full-name">${name}</div>
       <div class="temperament">
         ${temperament}
-      </div>`;
+      </div></div>`;
   catInfoContainer.innerHTML = card;
 };
