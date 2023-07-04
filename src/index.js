@@ -17,6 +17,8 @@ const selectBreedElem = document.querySelector('.breed-select');
 const catInfoContainer = document.querySelector('.cat-info');
 const loaderElement = document.querySelector('.loader');
 
+loaderElement.classList.remove('is-hidden');
+
 fetchBreeds().then(data => {
   selectBreedElem.insertAdjacentHTML(
     'beforeend',
@@ -31,9 +33,13 @@ fetchBreeds().then(data => {
   new SlimSelect({
     select: selectBreedElem,
   });
+  loaderElement.classList.add('is-hidden');
+  selectBreedElem.classList.remove('is-hidden');
 });
 
 selectBreedElem.addEventListener('change', function (event) {
+  catInfoContainer.classList.add('is-hidden');
+  loaderElement.classList.remove('is-hidden');
   fetchCatByBreed(event.target.value).then(data => {
     console.log(data);
     if (data.length == 0) {
@@ -60,4 +66,6 @@ const makeElem = ({ url, name, temperament }) => {
         ${temperament}
       </div></div>`;
   catInfoContainer.innerHTML = card;
+  loaderElement.classList.add('is-hidden');
+  catInfoContainer.classList.remove('is-hidden');
 };
